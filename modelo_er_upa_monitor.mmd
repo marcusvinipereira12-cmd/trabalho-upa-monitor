@@ -1,0 +1,76 @@
+erDiagram
+    UPA ||--o{ SETOR : possui
+    SETOR ||--o{ FILA : organiza
+    SETOR ||--o{ ATENDIMENTO : recebe
+    CLASSIFICACAO_RISCO ||--o{ ATENDIMENTO : classifica
+    UPA ||--o{ MONITORAMENTO : registra
+    MONITORAMENTO ||--|{ MEDICAO : contem
+    SETOR ||..o{ MEDICAO : referencia
+
+    UPA {
+        int id_upa PK
+        string nome UK
+        string endereco
+        string municipio
+        string status
+    }
+
+    SETOR {
+        int id_setor PK
+        int id_upa FK
+        string nome
+        string descricao
+        string status
+    }
+
+    FILA {
+        int id_fila PK
+        int id_setor FK
+        string nome
+        string status
+        date data_referencia
+    }
+
+    CLASSIFICACAO_RISCO {
+        int id_classificacao PK
+        string nome UK
+        string prioridade
+        int ordem_prioridade
+    }
+
+    ATENDIMENTO {
+        int id_atendimento PK
+        int id_setor FK
+        int id_classificacao FK
+        string protocolo UK
+        date data_entrada
+        time hora_entrada
+        date data_inicio_atendimento
+        string status
+    }
+
+    MONITORAMENTO {
+        int id_monitoramento PK
+        int id_upa FK
+        date data_referencia
+        time hora_referencia
+        string origem_dado
+    }
+
+    MEDICAO {
+        int id_medicao PK
+        int id_monitoramento FK
+        int id_setor FK
+        int pacientes_aguardando
+        int casos_criticos
+        int total_atendimentos
+        decimal espera_media_minutos
+        decimal espera_maxima_minutos
+    }
+
+    %% Modelo lógico proposto a partir dos indicadores públicos.
+    %% Não representa um esquema interno confirmado do portal.
+    %% Cada UPA pode ter vários setores e várias capturas históricas.
+    %% MEDICAO guarda indicadores observados no instante da captura.
+    %% Capturas diferentes não devem ser somadas como pacientes únicos.
+    %% A classificação real de risco e suas regras devem ser confirmadas.
